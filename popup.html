@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>タイムゾーン変換</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="timezone-box">
+        <span class="timezone-icon maple-leaf-icon"></span>
+        <input type="text" class="timezone-input" id="canada-input" placeholder="カナダ時間">
+      </div>
+      <div class="timezone-box">
+        <span class="timezone-icon japan-flag-icon"></span>
+        <input type="text" class="timezone-input" id="japan-input" placeholder="日本時間">
+      </div>
+      <div class="note-box">
+        <input type="text" class="note-input" placeholder="メモ">
+      </div>
+      <div class="remove-box">
+        <button class="delete-btn">×</button>
+      </div>
+    </div>
+    <div class="add-row">
+      <button id="add-row-btn">+ 行を追加</button>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

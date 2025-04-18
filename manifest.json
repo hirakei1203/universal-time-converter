@@ -1,0 +1,18 @@
+{
+    "manifest_version": 3,
+    "name": "Canada Japan Time Converter",
+    "version": "1.0.0",
+    "description": "カナダと日本の時間を簡単に変換できる拡張機能です。メモも追加できます。",
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16":  "earth_16.png",
+        "48":  "earth_48.png",
+        "128": "earth_128.png"
+      }
+    },
+    "permissions": [
+      "storage"
+    ]
+  }
+  

@@ -1,0 +1,219 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+body {
+  width: 550px;
+  padding: 20px;
+  background-color: white;
+}
+
+.container {
+  /* background-color: white; */
+  /* border-radius: 15px; */
+  /* padding: 15px; */
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+}
+
+.row {
+  display: flex;
+  margin-bottom: 8px;
+  /* padding: 6px 5px; */
+  align-items: center;
+}
+
+.timezone-box {
+  flex: 1;
+  margin: 0 5px;
+  position: relative;
+}
+
+.timezone-input {
+  width: 100%;
+  padding: 10px;
+  padding-left: 30px; /* アイコンのスペースを確保 */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 12px;
+  text-align: center;
+  /* 曜日を表示するためにサイズを調整 */
+  height: auto;
+  min-width: 170px;
+}
+
+/* アイコン用の基本スタイル */
+.timezone-icon {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* メープルリーフアイコン */
+.maple-leaf-icon {
+  background-image: url('maple_leaf.png');
+}
+
+/* 日本国旗アイコン */
+.japan-flag-icon {
+  background-image: url('syuriken.png');
+}
+
+.note-box {
+  flex: 0.8;
+  display: flex;
+  align-items: center;
+  margin: 0 5px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  padding: 0 5px;
+}
+
+.note-input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.remove-box {
+  margin: 0 5px;
+  display: flex;
+  align-items: center;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.delete-btn:hover {
+  color: #555;
+}
+
+.add-row {
+  text-align: center;
+  margin-top: 10px;
+}
+
+#add-row-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 5px;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#add-row-btn:hover {
+  background-color: #eaeaea;
+}
+
+input:focus {
+  outline: 2px solid #4d90fe;
+}
+
+/* カレンダーポップアップのスタイル */
+.calendar-popup {
+  width: 300px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  position: absolute;
+  z-index: 1000;
+}
+
+/* カレンダーの曜日ヘッダー */
+.calendar-popup .header-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* カレンダーの日付グリッド */
+.calendar-popup .dates-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+/* カレンダーの日付セル */
+.calendar-popup .date-cell {
+  text-align: center;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.calendar-popup .date-cell:hover {
+  background-color: #f0f0f0;
+}
+
+.calendar-popup .date-cell.today {
+  background-color: #4d90fe;
+  color: white;
+}
+
+.calendar-popup .date-cell.sunday {
+  color: red;
+}
+
+.calendar-popup .date-cell.saturday {
+  color: blue;
+}
+
+/* 時間選択コンテナ */
+.time-container {
+  margin-top: 10px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.time-option {
+  padding: 8px;
+  text-align: center;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.time-option:hover {
+  background-color: #f0f0f0;
+}
+
+/* カレンダーコンテナのスタイル */
+.calendar-container {
+  width: 100%;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/* カレンダーの日付セル（選択されている日付） */
+.date-cell.selected {
+  background-color: #e0e9ff;
+  border-radius: 50%;
+}
