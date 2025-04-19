@@ -1,10 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // カナダと日本の時差（カナダ東部時間の場合）: 日本は13時間先
-  const TIME_DIFFERENCE = 13 * 60 * 60 * 1000; // ミリ秒に変換
+  // カナダと日本の時差（カナダ太平洋時間の場合）: 日本は16時間先
+  const TIME_DIFFERENCE = 16 * 60 * 60 * 1000; // ミリ秒に変換
   
   // カナダと日本のタイムゾーン
-  const CANADA_TIMEZONE = 'America/Toronto';
+  const CANADA_TIMEZONE = 'America/Vancouver';
   const JAPAN_TIMEZONE = 'Asia/Tokyo';
+  
+  // デフォルトのタイムゾーン設定
+  const DEFAULT_LEFT_TIMEZONE = 'America/Vancouver';
+  const DEFAULT_RIGHT_TIMEZONE = 'Asia/Tokyo';
   
   // 各行の選択された日付を保存するオブジェクト
   const rowSelectedDates = {};
@@ -12,8 +16,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // 各行の選択された時間を保存するオブジェクト
   const rowSelectedTimes = {};
   
-  // 各行のUnixタイムスタンプを保存するオブジェクト (ミリ秒)
-  const rowTimestamps = {};
+  // 各行のデータを保存するオブジェクト
+  // 形式: {
+  //   unixtime: 1234567890000,
+  //   left: { timezone: "America/Toronto" },
+  //   right: { timezone: "Asia/Tokyo" }
+  // }
+  const rowData = {};
   
   // 行追加ボタン
   const addRowBtn = document.getElementById('add-row-btn');
@@ -106,7 +115,10 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   /**
-   * 日付と時間を選択したときの共通処理
+   * 日付と時間を選択したときの処理
+   * @param {Object} dateObj - 選択された日付オブジェクト
+   * @param {string} timeStr - 選択された時間
+   * @param {Element} inputElement - ソースとなる入力要素
    */
   function handleDateTimeSelection(dateObj, timeStr, inputElement) {
     if (!dateObj || !timeStr || !inputElement) return;
@@ -117,12 +129,37 @@ document.addEventListener('DOMContentLoaded', function() {
     const rowId = Array.from(document.querySelectorAll('.row')).indexOf(row);
     if (rowId === -1) return;
     
-    // 日付と時間からタイムスタンプを生成
-    const timestamp = dateTimeToTimestamp(dateObj, timeStr);
-    if (!timestamp) return;
+    const canadaInput = row.querySelector('[id^="canada-input"]');
+    const japanInput = row.querySelector('[id^="japan-input"]');
+    if (!canadaInput || !japanInput) return;
     
-    // タイムスタンプを使用して両方の入力フィールドを更新
-    updateFieldsWithTimestamp(rowId, timestamp, inputElement);
+    // この行のデータを初期化（存在しない場合）
+    if (!rowData[rowId]) {
+      rowData[rowId] = {
+        unixtime: null,
+        left: { timezone: DEFAULT_LEFT_TIMEZONE },
+        right: { timezone: DEFAULT_RIGHT_TIMEZONE }
+      };
+    }
+    
+    // 入力元に基づいてタイムゾーンを特定
+    const sourceTimezone = inputElement.id.includes('canada') 
+      ? rowData[rowId].left.timezone 
+      : rowData[rowId].right.timezone;
+    
+    // 日付と時間からタイムスタンプを生成
+    const unixTime = convertLocalDateTimeToUnixTime(dateObj, timeStr, sourceTimezone);
+    if (!unixTime) return;
+    
+    // タイムスタンプを保存
+    rowData[rowId].unixtime = unixTime;
+    
+    // 左右のタイムゾーンに変換して表示
+    canadaInput.value = formatUnixTimeToLocalDateTime(unixTime, rowData[rowId].left.timezone);
+    japanInput.value = formatUnixTimeToLocalDateTime(unixTime, rowData[rowId].right.timezone);
+    
+    // データを保存
+    saveData();
   }
 
   /**
@@ -153,48 +190,72 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!row) return;
     
     const rowId = Array.from(document.querySelectorAll('.row')).indexOf(row);
+    if (rowId === -1) return;
+    
     const targetInput = isCanadaInput 
       ? row.querySelector('[id^="japan-input"]') 
       : row.querySelector('[id^="canada-input"]');
     
     if (!targetInput) return;
     
-    // 入力された時間が日付を含むか確認
-    const inputValue = inputElement.value.trim();
+    // この行のデータを初期化（存在しない場合）
+    if (!rowData[rowId]) {
+      rowData[rowId] = {
+        unixtime: null,
+        left: { timezone: DEFAULT_LEFT_TIMEZONE },
+        right: { timezone: DEFAULT_RIGHT_TIMEZONE }
+      };
+    }
     
-    // 既存のタイムスタンプとカレンダー選択を取得
-    let selectedDate = rowSelectedDates[rowId];
+    // 入力元と対象のタイムゾーンを取得
+    const sourceTimezone = isCanadaInput ? rowData[rowId].left.timezone : rowData[rowId].right.timezone;
+    const targetTimezone = isCanadaInput ? rowData[rowId].right.timezone : rowData[rowId].left.timezone;
+    
+    // 入力された時間を解析
+    const inputValue = inputElement.value.trim();
     const selectedTime = parseTimeString(inputValue);
     
-    if (selectedTime) {
-      // 入力に日付が含まれているか確認 (例: 2023/12/25(月) 14:30)
-      const dateFromInput = parseDateString(inputValue);
-      if (dateFromInput) {
-        // 選択された日付を更新
-        selectedDate = dateFromInput;
-        rowSelectedDates[rowId] = selectedDate;
+    if (!selectedTime) {
+      // 時間のパースに失敗した場合はそのまま保存
+      saveData();
+      return;
+    }
+    
+    // 選択された日付を取得
+    let selectedDate = rowSelectedDates[rowId];
+    
+    // 入力に日付が含まれているか確認 (例: 2023/12/25(月) 14:30)
+    const dateFromInput = parseDateString(inputValue);
+    if (dateFromInput) {
+      // 選択された日付を更新
+      selectedDate = dateFromInput;
+      rowSelectedDates[rowId] = selectedDate;
+    }
+    
+    // 日付が選択されているかどうかで処理を分岐
+    if (selectedDate) {
+      // 日付と時間が両方ある場合はタイムスタンプベースで処理
+      const formattedTime = formatTime(selectedTime.hours, selectedTime.minutes);
+      rowSelectedTimes[rowId] = formattedTime;
+      
+      // タイムゾーンを指定してハンドラを呼び出す
+      handleDateTimeSelection(selectedDate, formattedTime, inputElement);
+    } else {
+      // 日付がない場合は単純に時間変換のみ行う（旧方式）
+      // 注: この部分は将来的に不要になるかもしれませんが、互換性のために残しています
+      let targetHours, targetMinutes;
+      
+      if (isCanadaInput) {
+        const japanTime = convertToJapanTime(selectedTime.hours, selectedTime.minutes);
+        targetHours = japanTime.hours;
+        targetMinutes = japanTime.minutes;
+      } else {
+        const canadaTime = convertToCanadaTime(selectedTime.hours, selectedTime.minutes);
+        targetHours = canadaTime.hours;
+        targetMinutes = canadaTime.minutes;
       }
       
-      if (selectedDate) {
-        // 時刻を選択
-        const formattedTime = formatTime(selectedTime.hours, selectedTime.minutes);
-        rowSelectedTimes[rowId] = formattedTime;
-        
-        // 日付と時間を選択したときの共通処理を呼び出す
-        handleDateTimeSelection(selectedDate, formattedTime, inputElement);
-      } else {
-        // 日付がない場合は単純に時間変換のみ行う（旧方式）
-        if (isCanadaInput) {
-          const japanTime = convertToJapanTime(selectedTime.hours, selectedTime.minutes);
-          targetInput.value = formatTime(japanTime.hours, japanTime.minutes);
-        } else {
-          const canadaTime = convertToCanadaTime(selectedTime.hours, selectedTime.minutes);
-          targetInput.value = formatTime(canadaTime.hours, canadaTime.minutes);
-        }
-        saveData();
-      }
-    } else {
-      // 時間のパースに失敗した場合はそのまま保存
+      targetInput.value = formatTime(targetHours, targetMinutes);
       saveData();
     }
   }
@@ -297,27 +358,77 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   /**
-   * 日時文字列をUnixタイムスタンプに変換する関数
-   * 入力例: { year: 2023, month: 11, day: 25 }, "14:30" → Unixタイムスタンプ
+   * 特定タイムゾーンでの日時をUnixタイムスタンプに変換する関数
+   * @param {Object} dateObj - 日付オブジェクト ({ year, month, day })
+   * @param {string} timeStr - 時間文字列
+   * @param {string} timezone - 入力日時のタイムゾーン
+   * @return {number|null} ミリ秒単位のUnixタイムスタンプまたはnull
    */
-  function dateTimeToTimestamp(dateObj, timeStr) {
+  function convertLocalDateTimeToUnixTime(dateObj, timeStr, timezone = DEFAULT_LEFT_TIMEZONE) {
     if (!dateObj || !timeStr) return null;
     
     const time = parseTimeString(timeStr);
     if (!time) return null;
     
-    // JavaScriptのDateオブジェクトは0-11月なので、月は調整不要
-    const date = new Date(dateObj.year, dateObj.month, dateObj.day, time.hours, time.minutes);
-    return date.getTime(); // ミリ秒単位のUnixタイムスタンプ
+    // 入力タイムゾーン用の日付文字列（'YYYY-MM-DD HH:MM:SS'形式）
+    const dateTimeStr = `${dateObj.year}/${(dateObj.month + 1)}/${dateObj.day} ${time.hours}:${time.minutes}:00`;
+    
+    // タイムゾーン処理のためにmoment-timezoneライブラリを使用するか、
+    // JavaScriptのDate.prototype.toLocaleStringを使った独自計算を行います
+    
+    // 入力のタイムゾーンでの時刻をUTCに変換
+    // この実装では、一度UTC時間に変換した後、タイムスタンプを取得します
+    
+    // まず、入力されたローカル時間をそのまま解釈（ブラウザのローカルタイムゾーンでの時間として）
+    const localDate = new Date(dateTimeStr);
+    
+    // 次に、この時間をオブジェクトとして表現
+    const localYear = localDate.getFullYear();
+    const localMonth = localDate.getMonth(); // 0-11
+    const localDay = localDate.getDate();
+    const localHours = localDate.getHours();
+    const localMinutes = localDate.getMinutes();
+    
+    // ブラウザのタイムゾーンとの差分を計算（分単位）
+    const localTZOffset = -new Date().getTimezoneOffset(); // 分単位で、UTC - ローカル時間
+    
+    // 目的のタイムゾーンのオフセットを取得（東京は+9時間=540分、バンクーバーは-7時間=-420分）
+    let targetTZOffset = 0;
+    
+    if (timezone === 'Asia/Tokyo') {
+      targetTZOffset = 540; // 東京は UTC+9
+    } else if (timezone === 'America/Vancouver') {
+      targetTZOffset = -420; // バンクーバーは UTC-7（夏時間考慮）
+    }
+    
+    // タイムゾーン間の差分（分単位）
+    const tzDiffMinutes = targetTZOffset - localTZOffset;
+    
+    // ローカル時間をベースに、目的のタイムゾーンの時間を作成
+    const targetDate = new Date(
+      localYear, 
+      localMonth, 
+      localDay, 
+      localHours, 
+      localMinutes - tzDiffMinutes
+    );
+    
+    return targetDate.getTime();
   }
   
   /**
-   * タイムスタンプをカナダ時間に変換して文字列で返す
+   * Unixタイムスタンプを特定タイムゾーンの日時文字列に変換する
+   * @param {number} unixTime - 変換するUnixタイムスタンプ（ミリ秒）
+   * @param {string} timezone - 変換先のタイムゾーン
+   * @return {string} フォーマットされた日時文字列
    */
-  function timestampToCanadaTime(timestamp) {
-    if (!timestamp) return '';
+  function formatUnixTimeToLocalDateTime(unixTime, timezone) {
+    if (!unixTime) return '';
     
-    // オプションでフォーマットを指定
+    // Unixタイムスタンプから日時オブジェクトを作成
+    const date = new Date(unixTime);
+    
+    // タイムゾーンを指定してフォーマット
     const options = {
       year: 'numeric',
       month: 'numeric',
@@ -325,102 +436,40 @@ document.addEventListener('DOMContentLoaded', function() {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false,
-      timeZone: CANADA_TIMEZONE
+      timeZone: timezone
     };
     
-    // カナダ時間に変換
-    const canadaDate = new Date(timestamp);
-    
     // 日付と時間をフォーマット
-    let formatted = canadaDate.toLocaleString('ja-JP', options);
+    let formatted = date.toLocaleString('ja-JP', options);
     
-    // 曜日を追加
-    const dayOfWeek = getDayOfWeekFromTimestamp(timestamp, CANADA_TIMEZONE);
+    // 曜日を取得して追加
+    const dayOfWeek = date.toLocaleString('ja-JP', { weekday: 'short', timeZone: timezone });
     
     // "2023/12/25 14:30" → "2023/12/25(月) 14:30"の形式に変更
     formatted = formatted.replace(' ', `(${dayOfWeek}) `);
+    
+    // デバッグ情報（開発中のみ）
+    console.log(`UnixTime: ${unixTime}, TZ: ${timezone}, Formatted: ${formatted}`);
     
     return formatted;
   }
   
   /**
-   * タイムスタンプを日本時間に変換して文字列で返す
+   * UnixタイムスタンプをUIの左側に表示するタイムゾーンの日時に変換
+   * @param {number} unixTime - 変換するUnixタイムスタンプ（ミリ秒）
+   * @return {string} フォーマットされた日時文字列
    */
-  function timestampToJapanTime(timestamp) {
-    if (!timestamp) return '';
-    
-    // オプションでフォーマットを指定
-    const options = {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-      timeZone: JAPAN_TIMEZONE
-    };
-    
-    // 日本時間に変換
-    const japanDate = new Date(timestamp);
-    
-    // 日付と時間をフォーマット
-    let formatted = japanDate.toLocaleString('ja-JP', options);
-    
-    // 曜日を追加
-    const dayOfWeek = getDayOfWeekFromTimestamp(timestamp, JAPAN_TIMEZONE);
-    
-    // "2023/12/25 14:30" → "2023/12/25(月) 14:30"の形式に変更
-    formatted = formatted.replace(' ', `(${dayOfWeek}) `);
-    
-    return formatted;
+  function formatUnixTimeToLeftTimezone(unixTime) {
+    return formatUnixTimeToLocalDateTime(unixTime, DEFAULT_LEFT_TIMEZONE);
   }
   
   /**
-   * タイムスタンプから曜日を取得する関数
+   * UnixタイムスタンプをUIの右側に表示するタイムゾーンの日時に変換
+   * @param {number} unixTime - 変換するUnixタイムスタンプ（ミリ秒）
+   * @return {string} フォーマットされた日時文字列
    */
-  function getDayOfWeekFromTimestamp(timestamp, timezone) {
-    const date = new Date(timestamp);
-    const options = { weekday: 'short', timeZone: timezone };
-    const dayOfWeek = date.toLocaleString('ja-JP', options);
-    return dayOfWeek;
-  }
-  
-  /**
-   * 入力フィールドと対応フィールドを更新する関数
-   */
-  function updateFieldsWithTimestamp(rowId, timestamp, sourceInput) {
-    const row = document.querySelectorAll('.row')[rowId];
-    if (!row) return;
-    
-    const canadaInput = row.querySelector('[id^="canada-input"]');
-    const japanInput = row.querySelector('[id^="japan-input"]');
-    if (!canadaInput || !japanInput) return;
-    
-    // タイムスタンプを保存
-    rowTimestamps[rowId] = timestamp;
-    
-    // カナダ時間と日本時間に変換して表示
-    canadaInput.value = timestampToCanadaTime(timestamp);
-    japanInput.value = timestampToJapanTime(timestamp);
-    
-    // データを保存
-    saveData();
-  }
-  
-  /**
-   * カナダ時間から日本時間に変換 (古い関数を残してAPI互換性を維持)
-   */
-  function convertToJapanTime(hours, minutes) {
-    let japanHours = (hours + TIME_DIFFERENCE / 3600000) % 24;
-    return { hours: Math.floor(japanHours), minutes };
-  }
-  
-  /**
-   * 日本時間からカナダ時間に変換 (古い関数を残してAPI互換性を維持)
-   */
-  function convertToCanadaTime(hours, minutes) {
-    let canadaHours = (hours - TIME_DIFFERENCE / 3600000 + 24) % 24;
-    return { hours: Math.floor(canadaHours), minutes };
+  function formatUnixTimeToRightTimezone(unixTime) {
+    return formatUnixTimeToLocalDateTime(unixTime, DEFAULT_RIGHT_TIMEZONE);
   }
   
   /**
@@ -452,11 +501,18 @@ document.addEventListener('DOMContentLoaded', function() {
       const japanInput = row.querySelector('[id^="japan-input"]');
       const noteInput = row.querySelector('.note-input');
       
+      // この行のデータ（存在しない場合はデフォルト値を使用）
+      const currentRowData = rowData[index] || {
+        unixtime: null,
+        left: { timezone: DEFAULT_LEFT_TIMEZONE },
+        right: { timezone: DEFAULT_RIGHT_TIMEZONE }
+      };
+      
       data.push({
         canadaTime: canadaInput ? canadaInput.value : '',
         japanTime: japanInput ? japanInput.value : '',
         note: noteInput ? noteInput.value : '',
-        timestamp: rowTimestamps[index] || null
+        rowData: currentRowData
       });
     });
     
@@ -474,7 +530,7 @@ document.addEventListener('DOMContentLoaded', function() {
       'timezoneData': data,
       'rowSelectedDates': rowSelectedDates,
       'rowSelectedTimes': rowSelectedTimes,
-      'rowTimestamps': rowTimestamps
+      'rowData': rowData
     }, function() {
       console.log('データが保存されました');
     });
@@ -484,7 +540,7 @@ document.addEventListener('DOMContentLoaded', function() {
    * 保存されたデータを読み込む
    */
   function loadSavedData() {
-    chrome.storage.local.get(['timezoneData', 'rowSelectedDates', 'rowSelectedTimes', 'rowTimestamps'], function(result) {
+    chrome.storage.local.get(['timezoneData', 'rowSelectedDates', 'rowSelectedTimes', 'rowData'], function(result) {
       // 日付データの読み込み
       if (result.rowSelectedDates) {
         Object.assign(rowSelectedDates, result.rowSelectedDates);
@@ -495,9 +551,9 @@ document.addEventListener('DOMContentLoaded', function() {
         Object.assign(rowSelectedTimes, result.rowSelectedTimes);
       }
       
-      // タイムスタンプデータの読み込み
-      if (result.rowTimestamps) {
-        Object.assign(rowTimestamps, result.rowTimestamps);
+      // 行データの読み込み
+      if (result.rowData) {
+        Object.assign(rowData, result.rowData);
       }
       
       if (result.timezoneData && result.timezoneData.length > 0) {
@@ -507,19 +563,19 @@ document.addEventListener('DOMContentLoaded', function() {
         // 保存されたデータで既存の行を更新
         for (let i = 0; i < Math.min(existingRows.length, result.timezoneData.length); i++) {
           const row = existingRows[i];
-          const rowData = result.timezoneData[i];
+          const savedData = result.timezoneData[i];
           
           const canadaInput = row.querySelector('[id^="canada-input"]');
           const japanInput = row.querySelector('[id^="japan-input"]');
           const noteInput = row.querySelector('.note-input');
           
-          if (canadaInput) canadaInput.value = rowData.canadaTime || '';
-          if (japanInput) japanInput.value = rowData.japanTime || '';
-          if (noteInput) noteInput.value = rowData.note || '';
+          if (canadaInput) canadaInput.value = savedData.canadaTime || '';
+          if (japanInput) japanInput.value = savedData.japanTime || '';
+          if (noteInput) noteInput.value = savedData.note || '';
           
-          // タイムスタンプが保存されている場合は復元
-          if (rowData.timestamp) {
-            rowTimestamps[i] = rowData.timestamp;
+          // 行データが保存されている場合は復元
+          if (savedData.rowData) {
+            rowData[i] = savedData.rowData;
           }
         }
         
@@ -536,12 +592,13 @@ document.addEventListener('DOMContentLoaded', function() {
   /**
    * データ付きの新しい行を追加
    */
-  function addNewRowWithData(rowData) {
+  function addNewRowWithData(savedData) {
     const container = document.querySelector('.container');
     const addRowDiv = document.querySelector('.add-row');
     
     // 行番号を取得（既存の行数+1）
     const rowCount = document.querySelectorAll('.row').length + 1;
+    const rowIndex = rowCount - 1;
     
     // 新しい行を作成
     const newRow = document.createElement('div');
@@ -549,14 +606,14 @@ document.addEventListener('DOMContentLoaded', function() {
     newRow.innerHTML = `
       <div class="timezone-box">
         <span class="timezone-icon maple-leaf-icon"></span>
-        <input type="text" class="timezone-input" id="canada-input${rowCount}" placeholder="カナダ時間" value="${rowData.canadaTime || ''}">
+        <input type="text" class="timezone-input" id="canada-input${rowCount}" placeholder="カナダ時間" value="${savedData.canadaTime || ''}">
       </div>
       <div class="timezone-box">
         <span class="timezone-icon japan-flag-icon"></span>
-        <input type="text" class="timezone-input" id="japan-input${rowCount}" placeholder="日本時間" value="${rowData.japanTime || ''}">
+        <input type="text" class="timezone-input" id="japan-input${rowCount}" placeholder="日本時間" value="${savedData.japanTime || ''}">
       </div>
       <div class="note-box">
-        <input type="text" class="note-input" placeholder="メモ" value="${rowData.note || ''}">
+        <input type="text" class="note-input" placeholder="メモ" value="${savedData.note || ''}">
       </div>
       <div class="remove-box">
         <button class="delete-btn">×</button>
@@ -573,13 +630,20 @@ document.addEventListener('DOMContentLoaded', function() {
     setupDateTimeSelectors(); // 新しい行にもカレンダー機能を設定
     
     // 行のIDを取得して初期選択を明示的に削除（rowDataに値がない場合）
-    const rowId = Array.from(document.querySelectorAll('.row')).indexOf(newRow);
-    if (rowId !== -1) {
-      // rowDataが空の場合は選択データをクリア
-      if (!rowData.canadaTime && !rowData.japanTime) {
-        if (rowSelectedDates[rowId]) delete rowSelectedDates[rowId];
-        if (rowSelectedTimes[rowId]) delete rowSelectedTimes[rowId];
-      }
+    if (!savedData.canadaTime && !savedData.japanTime) {
+      if (rowSelectedDates[rowIndex]) delete rowSelectedDates[rowIndex];
+      if (rowSelectedTimes[rowIndex]) delete rowSelectedTimes[rowIndex];
+    }
+    
+    // 行データを初期化（存在しない場合のみ）
+    if (savedData.rowData) {
+      rowData[rowIndex] = savedData.rowData;
+    } else {
+      rowData[rowIndex] = {
+        unixtime: null,
+        left: { timezone: DEFAULT_LEFT_TIMEZONE },
+        right: { timezone: DEFAULT_RIGHT_TIMEZONE }
+      };
     }
   }
 
@@ -744,17 +808,6 @@ document.addEventListener('DOMContentLoaded', function() {
     timeContainer.style.overflowY = 'auto';
     timeContainer.style.maxHeight = '230px';
     
-    /**
-     * 入力フィールドとその対応フィールドに日付と時間を設定する関数
-     * この関数はcreateCalendarBelow関数内でのみアクセス可能
-     */
-    function updateTimezoneFields(targetInput, dateObj, timeStr) {
-      if (!dateObj || !timeStr) return;
-      
-      // 日付と時間を選択したときの共通処理を呼び出す
-      handleDateTimeSelection(dateObj, timeStr, targetInput);
-    }
-
     // 時間オプション
     const timeOptions = [
       '00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', 
@@ -796,11 +849,10 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedTime = time;
         rowSelectedTimes[rowId] = time;
         
-        // 入力フィールドとその対応フィールドを更新
-        updateTimezoneFields(inputElement, selectedDate, time);
-        
-        // データは既にupdateTimezoneFields内で保存されたので、ここでは不要
-        // saveData();
+        // 入力フィールドとその対応フィールドを更新（直接handleDateTimeSelectionを呼び出す）
+        if (selectedDate) {
+          handleDateTimeSelection(selectedDate, time, inputElement);
+        }
         
         // 時刻を選択したら、カレンダーを閉じる
         // calendarContainer.remove();
@@ -959,8 +1011,24 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // 既に時間が選択されている場合は、入力フィールドを更新
       if (selectedTime) {
-        updateTimezoneFields(inputField, selectedDate, selectedTime);
+        handleDateTimeSelection(selectedDate, selectedTime, inputField);
       }
     }
+  }
+
+  /**
+   * カナダ時間から日本時間に変換 (古い関数を残してAPI互換性を維持)
+   */
+  function convertToJapanTime(hours, minutes) {
+    let japanHours = (hours + 16) % 24;
+    return { hours: Math.floor(japanHours), minutes };
+  }
+  
+  /**
+   * 日本時間からカナダ時間に変換 (古い関数を残してAPI互換性を維持)
+   */
+  function convertToCanadaTime(hours, minutes) {
+    let canadaHours = (hours - 16 + 24) % 24;
+    return { hours: Math.floor(canadaHours), minutes };
   }
 });
