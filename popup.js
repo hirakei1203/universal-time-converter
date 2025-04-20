@@ -853,9 +853,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedDate) {
           handleDateTimeSelection(selectedDate, time, inputElement);
         }
-        
-        // 時刻を選択したら、カレンダーを閉じる
-        // calendarContainer.remove();
       };
       
       timeContainer.appendChild(timeOption);
