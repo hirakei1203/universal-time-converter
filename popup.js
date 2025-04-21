@@ -122,13 +122,14 @@ document.addEventListener('DOMContentLoaded', function() {
    */
   function handleDateTimeSelection(dateObj, timeStr, inputElement) {
     if (!dateObj || !timeStr || !inputElement) return;
-    
+    console.log('handleDateTimeSelection', dateObj, timeStr, inputElement);
+    console.log('inputElement.closest', inputElement.closest('.row'));
     const row = inputElement.closest('.row');
     if (!row) return;
     
     const rowId = Array.from(document.querySelectorAll('.row')).indexOf(row);
     if (rowId === -1) return;
-    
+    console.log('rowData', rowData[rowId]);
     const canadaInput = row.querySelector('[id^="canada-input"]');
     const japanInput = row.querySelector('[id^="japan-input"]');
     if (!canadaInput || !japanInput) return;
@@ -183,6 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
     
   /**
+   * (時間を直接入力する場合)
    * 入力された時間と日付からタイムスタンプを作成し、入力フィールドを更新する共通処理
    */
   function processTimeInput(inputElement, isCanadaInput) {
