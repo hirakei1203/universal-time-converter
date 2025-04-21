@@ -122,14 +122,13 @@ document.addEventListener('DOMContentLoaded', function() {
    */
   function handleDateTimeSelection(dateObj, timeStr, inputElement) {
     if (!dateObj || !timeStr || !inputElement) return;
-    console.log('handleDateTimeSelection', dateObj, timeStr, inputElement);
-    console.log('inputElement.closest', inputElement.closest('.row'));
+    
     const row = inputElement.closest('.row');
     if (!row) return;
     
     const rowId = Array.from(document.querySelectorAll('.row')).indexOf(row);
     if (rowId === -1) return;
-    console.log('rowData', rowData[rowId]);
+    
     const canadaInput = row.querySelector('[id^="canada-input"]');
     const japanInput = row.querySelector('[id^="japan-input"]');
     if (!canadaInput || !japanInput) return;
@@ -923,7 +922,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
           dateCell.style.backgroundColor = '#4d90fe';
           dateCell.style.color = 'white';
-          dateCell.style.borderRadius = '50%';
+          dateCell.style.borderRadius = '5%';
         }
         
         // 日曜日は赤、土曜日は青
@@ -937,7 +936,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 選択された日付をハイライト
         if (selectedDate && day === selectedDate.day && currentMonth === selectedDate.month && currentYear === selectedDate.year) {
           dateCell.style.backgroundColor = '#e0e9ff';
-          dateCell.style.borderRadius = '50%';
+          dateCell.style.borderRadius = '5%';
           dateCell.style.fontWeight = 'bold'; // 選択された日付を太字にする
           if (!(day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear())) {
             dateCell.style.color = 'black';
