@@ -308,8 +308,8 @@ document.addEventListener('DOMContentLoaded', function() {
    * "14:30"や"1430"や"2pm"などの形式に対応
    */
   function parseTimeString(timeStr) {
-    // 日付部分を切り取る (例: "2023/12/25(月) 14:30" → "14:30")
-    const timePart = timeStr.includes(')') ? timeStr.split(') ')[1] : timeStr;
+    // 日付部分を切り取る (例: "2023/12/25(月) 午後2:30" → "午後2:30")
+    const timePart = timeStr.includes(') ') ? timeStr.split(') ')[1] : timeStr;
     
     if (!timePart || timePart.trim() === '') return null;
     
@@ -318,8 +318,29 @@ document.addEventListener('DOMContentLoaded', function() {
     let hours = 0;
     let minutes = 0;
     
+    // "1:30 AM"や"2:30 PM"形式
+    if (processedTimeStr.includes(':') && (processedTimeStr.includes('am') || processedTimeStr.includes('pm'))) {
+      const isPM = processedTimeStr.includes('pm');
+      const timeParts = processedTimeStr.split(' ')[0].split(':');
+      hours = parseInt(timeParts[0], 10);
+      minutes = parseInt(timeParts[1], 10);
+      
+      if (isPM && hours < 12) hours += 12;
+      if (!isPM && hours === 12) hours = 0;
+    }
+    // "午前1:30"や"午後2:30"形式
+    else if (processedTimeStr.includes('午前') || processedTimeStr.includes('午後')) {
+      const isPM = processedTimeStr.includes('午後');
+      const timeWithoutPrefix = processedTimeStr.replace('午前', '').replace('午後', '').trim();
+      const timeParts = timeWithoutPrefix.split(':');
+      hours = parseInt(timeParts[0], 10);
+      minutes = parseInt(timeParts[1], 10);
+      
+      if (isPM && hours < 12) hours += 12;
+      if (!isPM && hours === 12) hours = 0;
+    }
     // "14:30"形式
-    if (processedTimeStr.includes(':')) {
+    else if (processedTimeStr.includes(':')) {
       const parts = processedTimeStr.split(':');
       hours = parseInt(parts[0], 10);
       minutes = parseInt(parts[1], 10);
@@ -436,7 +457,7 @@ document.addEventListener('DOMContentLoaded', function() {
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-      hour12: false,
+      hour12: true,
       timeZone: timezone
     };
     
@@ -446,8 +467,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // 曜日を取得して追加
     const dayOfWeek = date.toLocaleString('ja-JP', { weekday: 'short', timeZone: timezone });
     
-    // "2023/12/25 14:30" → "2023/12/25(月) 14:30"の形式に変更
+    // "2023/12/25 14:30" → "2023/12/25(月) 午後2:30"の形式に変更
     formatted = formatted.replace(' ', `(${dayOfWeek}) `);
+    
+    // AMとPMを午前と午後に置換
+    formatted = formatted.replace('AM', '午前');
+    formatted = formatted.replace('PM', '午後');
     
     // デバッグ情報（開発中のみ）
     console.log(`UnixTime: ${unixTime}, TZ: ${timezone}, Formatted: ${formatted}`);
@@ -810,14 +835,15 @@ document.addEventListener('DOMContentLoaded', function() {
     timeContainer.style.maxHeight = '230px';
     
     // 時間オプション
-    const timeOptions = [
-      '00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', 
-      '04:00', '04:30', '05:00', '05:30', '06:00', '06:30', '07:00', '07:30', 
-      '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', 
-      '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', 
-      '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', 
-      '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'
-    ];
+    const timeOptions = [];
+    for (let h = 0; h < 24; h++) {
+      for (let m = 0; m < 60; m += 30) {
+        const hour12 = h % 12 === 0 ? 12 : h % 12;
+        const ampm = h < 12 ? 'AM' : 'PM';
+        const minuteStr = m.toString().padStart(2, '0');
+        timeOptions.push(`${hour12}:${minuteStr} ${ampm}`);
+      }
+    }
     
     timeOptions.forEach(time => {
       const timeOption = document.createElement('div');
@@ -920,8 +946,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // 今日の日付をハイライト
         const today = new Date();
         if (day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
-          dateCell.style.backgroundColor = '#4d90fe';
-          dateCell.style.color = 'white';
+          dateCell.style.border = '2px solid #d9e8ff';
+          dateCell.style.color = 'black';
           dateCell.style.borderRadius = '5%';
         }
         
