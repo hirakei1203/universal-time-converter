@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "Canada Japan Time Converter",
-    "version": "1.0.1",
-    "description": "カナダと日本の時間を簡単に変換できる拡張機能です。メモも追加できます。",
+    "name": "Universal Time Converter",
+    "version": "1.0.0",
+    "description": "You can convert time to any timezone.",
     "action": {
       "default_popup": "popup.html",
       "default_icon": {
