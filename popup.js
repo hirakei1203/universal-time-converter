@@ -1,4 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
+  // CSS スタイルを追加
+  const style = document.createElement('style');
+  style.textContent = `
+    .globe-icon {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%234285F4" d="M256 48C141.13 48 48 141.13 48 256s93.13 208 208 208 208-93.13 208-208S370.87 48 256 48z"/><path fill="%23FFFFFF" d="M256 48c-2.5 0-5 .1-7.5.2 2.5-.1 5-.2 7.5-.2zM256 464c-2.5 0-5-.1-7.5-.2 2.5.1 5 .2 7.5 .2zM193.5 52.9c-1.4.1-2.8.3-4.2.4 1.4-.1 2.8-.3 4.2-.4zM318.5 459.1c1.4-.1 2.8-.3 4.2-.4-1.4.1-2.8.3-4.2.4zM189.3 53.3l-1.8.2 1.8-.2zM322.7 458.7l1.8-.2-1.8.2z"/><path fill="%23FFFFFF" d="M256 79.8c11.2 0 22.1.9 32.7 2.7-11-5.7-29.5-8.9-32.7-9.3-3.1.4-21.7 3.6-32.7 9.3 10.6-1.8 21.5-2.7 32.7-2.7zM256 432.2c-11.2 0-22.1-.9-32.7-2.7 11 5.7 29.5 8.9 32.7 9.3 3.1-.4 21.7-3.6 32.7-9.3-10.6 1.8-21.5 2.7-32.7 2.7z"/><path fill="%23FFFFFF" d="M319.5 91.3c-10.3-5-21.5-8.7-33.2-10.8 5.5 3.5 10.8 7.5 15.7 11.9 6.2-.5 12.1-.8 17.5-.8 0-.1 0-.2 0-.3z"/><path fill="%23FFFFFF" d="M209.8 92.4c4.9-4.4 10.2-8.3 15.7-11.9-11.7 2.1-22.9 5.8-33.2 10.8v.3c5.4 0 11.3.2 17.5.8z"/><path fill="%23FFFFFF" d="M319.5 420.7c-10.3 5-21.5 8.7-33.2 10.8-5.5-3.5-10.8-7.5-15.7-11.9-6.2.5-12.1.8-17.5.8 0 .1 0 .2 0 .3z"/><path fill="%23FFFFFF" d="M209.8 419.6c-4.9 4.4-10.2 8.3-15.7 11.9 11.7-2.1 22.9-5.8 33.2-10.8v-.3c-5.4 0-11.3-.2-17.5-.8z"/><path fill="%23FFFFFF" d="M258.9 91.9l-5.8-.2-5.8.2c-2 1.5-3.8 5.8-5.2 13.3 3.5-.3 7.1-.4 10.8-.4h.3c3.8 0 7.4.1 10.9.4-1.4-7.5-3.2-11.8-5.2-13.3z"/><path fill="%23FFFFFF" d="M258.9 420.1l-5.8.2-5.8-.2c-2-1.5-3.8-5.8-5.2-13.3 3.5.3 7.1.4 10.8.4h.3c3.8 0 7.4-.1 10.9-.4-1.4 7.5-3.2 11.8-5.2 13.3z"/><path fill="%23FFFFFF" d="M398.9 256c0-5.8-.3-11.5-.9-17.1-1.9-1.3-3.8-2.6-6-3.8-2.4 0-4.9.1-7.4.1-4.3 0-8.9-.1-13.6-.3-3 10.2-6.9 20.5-11.5 30.7 4.6 10.2 8.5 20.5 11.5 30.7 4.8-.2 9.3-.3 13.6-.3 2.5 0 5 0 7.4.1 2.1-1.2 4.1-2.5 6-3.8.6-5.7.9-11.4.9-17.2 0-6.4-.3-12.7-1-18.9.7-6.3 1-12.6 1-19.2z"/><path fill="%23FFFFFF" d="M113.1 256c0 5.8.3 11.5.9 17.1 1.9 1.3 3.8 2.6 6 3.8 2.4 0 4.9-.1 7.4-.1 4.3 0 8.9.1 13.6.3 3-10.2 6.9-20.5 11.5-30.7-4.6-10.2-8.5-20.5-11.5-30.7-4.8.2-9.3.3-13.6.3-2.5 0-5 0-7.4-.1-2.1 1.2-4.1 2.5-6 3.8-.6 5.7-.9 11.4-.9 17.2 0 6.4.3 12.7 1 18.9-.7 6.3-1 12.6-1 19.2z"/><path fill="%23FFFFFF" d="M256 152c-30.3 0-62.9 2.8-93 7.7-3.6 11.5-6.6 23.4-8.8 35.8 30.4-5.5 64.7-8.6 101.8-8.6 37.1 0 71.4 3.1 101.8 8.6-2.2-12.4-5.2-24.3-8.8-35.8-30.1-4.9-62.7-7.7-93-7.7z"/><path fill="%23FFFFFF" d="M256 360c30.3 0 62.9-2.8 93-7.7 3.6-11.5 6.6-23.4 8.8-35.8-30.4 5.5-64.7 8.6-101.8 8.6-37.1 0-71.4-3.1-101.8-8.6 2.2 12.4 5.2 24.3 8.8 35.8 30.1 4.9 62.7 7.7 93 7.7z"/><path fill="%23FFFFFF" d="M352.5 256c0-35.4-3.2-67.8-8.5-95.7-10.3-1.4-21-2.3-32-2.3-19.4 0-36.3 1.8-49.9 5.2-6.4 28.4-10 61.6-10 92.9 0 31.2 3.7 64.5 10 92.9 13.6 3.3 30.5 5.2 49.9 5.2 11 0 21.7-.9 32-2.3 5.3-28 8.5-60.4 8.5-95.9z"/><path fill="%23FFFFFF" d="M159.5 256c0 35.4 3.2 67.8 8.5 95.7 10.3 1.4 21 2.3 32 2.3 19.4 0 36.3-1.8 49.9-5.2 6.4-28.4 10-61.6 10-92.9 0-31.2-3.7-64.5-10-92.9-13.6-3.3-30.5-5.2-49.9-5.2-11 0-21.7.9-32 2.3-5.3 28-8.5 60.4-8.5 95.9z"/></svg>');
+      background-size: cover;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+  `;
+  document.head.appendChild(style);
+
   // カナダと日本の時差（カナダ太平洋時間の場合）: 日本は16時間先
   const TIME_DIFFERENCE = 16 * 60 * 60 * 1000; // ミリ秒に変換
   
@@ -16,6 +31,47 @@ document.addEventListener('DOMContentLoaded', function() {
     'America/Edmonton': 'エドモントン (MST/MDT)',
     'America/Toronto': 'トロント (EST/EDT)',
     'America/Halifax': 'ハリファックス (AST/ADT)'
+  };
+  
+  // 世界のタイムゾーンリスト
+  const WORLD_TIMEZONES = {
+    // 北米
+    'America/Los_Angeles': 'ロサンゼルス (UTC-8/7)',
+    'America/Denver': 'デンバー (UTC-7/6)',
+    'America/Chicago': 'シカゴ (UTC-6/5)',
+    'America/New_York': 'ニューヨーク (UTC-5/4)',
+    // 南米
+    'America/Sao_Paulo': 'サンパウロ (UTC-3)',
+    'America/Buenos_Aires': 'ブエノスアイレス (UTC-3)',
+    // ヨーロッパ
+    'Europe/London': 'ロンドン (UTC+0/1)',
+    'Europe/Paris': 'パリ (UTC+1/2)',
+    'Europe/Berlin': 'ベルリン (UTC+1/2)',
+    'Europe/Madrid': 'マドリード (UTC+1/2)',
+    'Europe/Rome': 'ローマ (UTC+1/2)',
+    'Europe/Amsterdam': 'アムステルダム (UTC+1/2)',
+    'Europe/Zurich': 'チューリッヒ (UTC+1/2)',
+    'Europe/Athens': 'アテネ (UTC+2/3)',
+    'Europe/Helsinki': 'ヘルシンキ (UTC+2/3)',
+    'Europe/Moscow': 'モスクワ (UTC+3)',
+    // アフリカ
+    'Africa/Cairo': 'カイロ (UTC+2)',
+    'Africa/Johannesburg': 'ヨハネスブルグ (UTC+2)',
+    // アジア
+    'Asia/Dubai': 'ドバイ (UTC+4)',
+    'Asia/Mumbai': 'ムンバイ (UTC+5:30)',
+    'Asia/Kolkata': 'コルカタ (UTC+5:30)',
+    'Asia/Dhaka': 'ダッカ (UTC+6)',
+    'Asia/Bangkok': 'バンコク (UTC+7)',
+    'Asia/Singapore': 'シンガポール (UTC+8)',
+    'Asia/Shanghai': '上海 (UTC+8)',
+    'Asia/Hong_Kong': '香港 (UTC+8)',
+    'Asia/Seoul': 'ソウル (UTC+9)',
+    'Asia/Tokyo': '東京 (UTC+9)',
+    // オセアニア
+    'Australia/Perth': 'パース (UTC+8)',
+    'Australia/Sydney': 'シドニー (UTC+10/11)',
+    'Pacific/Auckland': 'オークランド (UTC+12/13)'
   };
   
   // 各行の選択された日付を保存するオブジェクト
@@ -66,12 +122,12 @@ document.addEventListener('DOMContentLoaded', function() {
     newRow.className = 'row';
     newRow.innerHTML = `
       <div class="timezone-box">
-        <span class="timezone-icon maple-leaf-icon" title="タイムゾーンを変更"></span>
-        <input type="text" class="timezone-input" id="canada-input${rowCount}" placeholder="カナダ時間">
+        <span class="timezone-icon globe-icon" title="タイムゾーンを変更"></span>
+        <input type="text" class="timezone-input" id="canada-input${rowCount}" placeholder="左側の時間">
       </div>
       <div class="timezone-box">
-        <span class="timezone-icon japan-flag-icon"></span>
-        <input type="text" class="timezone-input" id="japan-input${rowCount}" placeholder="日本時間">
+        <span class="timezone-icon globe-icon" title="タイムゾーンを変更"></span>
+        <input type="text" class="timezone-input" id="japan-input${rowCount}" placeholder="右側の時間">
       </div>
       <div class="note-box">
         <input type="text" class="note-input" placeholder="メモ">
@@ -667,12 +723,12 @@ document.addEventListener('DOMContentLoaded', function() {
     newRow.className = 'row';
     newRow.innerHTML = `
       <div class="timezone-box">
-        <span class="timezone-icon maple-leaf-icon" title="タイムゾーンを変更"></span>
-        <input type="text" class="timezone-input" id="canada-input${rowCount}" placeholder="カナダ時間" value="${savedData.canadaTime || ''}">
+        <span class="timezone-icon globe-icon" title="タイムゾーンを変更"></span>
+        <input type="text" class="timezone-input" id="canada-input${rowCount}" placeholder="左側の時間" value="${savedData.canadaTime || ''}">
       </div>
       <div class="timezone-box">
-        <span class="timezone-icon japan-flag-icon"></span>
-        <input type="text" class="timezone-input" id="japan-input${rowCount}" placeholder="日本時間" value="${savedData.japanTime || ''}">
+        <span class="timezone-icon globe-icon" title="タイムゾーンを変更"></span>
+        <input type="text" class="timezone-input" id="japan-input${rowCount}" placeholder="右側の時間" value="${savedData.japanTime || ''}">
       </div>
       <div class="note-box">
         <input type="text" class="note-input" placeholder="メモ" value="${savedData.note || ''}">
@@ -1096,7 +1152,7 @@ document.addEventListener('DOMContentLoaded', function() {
    * カナダのタイムゾーンアイコンにイベントリスナーを設定
    */
   function setupTimezoneIcons() {
-    const timezoneIcons = document.querySelectorAll('.maple-leaf-icon');
+    const timezoneIcons = document.querySelectorAll('.maple-leaf-icon, .globe-icon');
     
     timezoneIcons.forEach(icon => {
       if (!icon.hasAttribute('data-event-set')) {
@@ -1122,11 +1178,14 @@ document.addEventListener('DOMContentLoaded', function() {
             };
           }
           
+          // 左右どちらのタイムゾーンアイコンがクリックされたか判定
+          const isLeftTimezone = this.nextElementSibling && this.nextElementSibling.id.includes('canada');
+          
           // 現在選択されているタイムゾーン
-          const currentTimezone = rowData[rowId].left.timezone;
+          const currentTimezone = isLeftTimezone ? rowData[rowId].left.timezone : rowData[rowId].right.timezone;
           
           // タイムゾーン選択メニューを作成して表示
-          showTimezoneSelectionMenu(this, rowId, currentTimezone);
+          showTimezoneSelectionMenu(this, rowId, currentTimezone, isLeftTimezone);
         });
         
         icon.setAttribute('data-event-set', 'true');
@@ -1138,10 +1197,11 @@ document.addEventListener('DOMContentLoaded', function() {
   /**
    * タイムゾーン選択メニューを表示する
    */
-  function showTimezoneSelectionMenu(iconElement, rowId, currentTimezone) {
+  function showTimezoneSelectionMenu(iconElement, rowId, currentTimezone, isLeftTimezone) {
     // メニューコンテナを作成
     const menuContainer = document.createElement('div');
     menuContainer.className = 'timezone-selection-menu';
+    menuContainer.dataset.isLeftTimezone = isLeftTimezone;
     menuContainer.style.position = 'absolute';
     menuContainer.style.zIndex = '1000';
     menuContainer.style.backgroundColor = 'white';
@@ -1150,18 +1210,34 @@ document.addEventListener('DOMContentLoaded', function() {
     menuContainer.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
     menuContainer.style.padding = '5px 0';
     menuContainer.style.minWidth = '250px';
-    menuContainer.style.maxHeight = '300px'; // 高さの上限を設定
+    menuContainer.style.maxHeight = '400px'; // 高さの上限を拡大
     menuContainer.style.display = 'flex';
     menuContainer.style.flexDirection = 'column';
     
     // メニュータイトル
     const menuTitle = document.createElement('div');
-    menuTitle.textContent = 'カナダのタイムゾーン選択';
+    menuTitle.textContent = 'タイムゾーン選択';
     menuTitle.style.fontWeight = 'bold';
     menuTitle.style.padding = '8px 10px';
     menuTitle.style.borderBottom = '1px solid #eee';
     menuTitle.style.marginBottom = '5px';
     menuTitle.style.flexShrink = '0'; // タイトルは縮小しない
+    
+    // 検索ボックス
+    const searchBox = document.createElement('div');
+    searchBox.style.padding = '8px 10px';
+    searchBox.style.borderBottom = '1px solid #eee';
+    searchBox.style.marginBottom = '5px';
+    searchBox.style.flexShrink = '0';
+    
+    const searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.placeholder = 'タイムゾーンを検索...';
+    searchInput.style.width = '100%';
+    searchInput.style.padding = '5px';
+    searchInput.style.border = '1px solid #ccc';
+    searchInput.style.borderRadius = '3px';
+    searchBox.appendChild(searchInput);
     
     // オプションを入れるスクロール可能なコンテナ
     const optionsContainer = document.createElement('div');
@@ -1169,48 +1245,123 @@ document.addEventListener('DOMContentLoaded', function() {
     optionsContainer.style.flexGrow = '1'; // 残りのスペースを占有
     
     menuContainer.appendChild(menuTitle);
+    menuContainer.appendChild(searchBox);
     menuContainer.appendChild(optionsContainer);
     
-    // タイムゾーンオプションを追加
-    Object.entries(CANADA_TIMEZONES).forEach(([timezone, label]) => {
-      const option = document.createElement('div');
-      option.textContent = label;
-      option.style.padding = '8px 15px';
-      option.style.cursor = 'pointer';
+    // すべてのタイムゾーンを結合（カナダのタイムゾーンも含む）
+    const allTimezones = {...CANADA_TIMEZONES, ...WORLD_TIMEZONES};
+    
+    // タイムゾーンを地域ごとにグループ化して表示
+    const regionGroups = {
+      '北米': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('America/') && 
+             (tz.includes('Vancouver') || tz.includes('Edmonton') || tz.includes('Toronto') || 
+              tz.includes('Halifax') || tz.includes('Los_Angeles') || tz.includes('Denver') || 
+              tz.includes('Chicago') || tz.includes('New_York'))),
+      '南米': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('America/') && 
+             (tz.includes('Sao_Paulo') || tz.includes('Buenos_Aires'))),
+      'ヨーロッパ': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('Europe/')),
+      'アフリカ': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('Africa/')),
+      'アジア': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('Asia/')),
+      'オセアニア': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('Australia/') || tz.startsWith('Pacific/'))
+    };
+    
+    // 地域ごとにオプションを追加
+    Object.entries(regionGroups).forEach(([regionName, timezones]) => {
+      if (timezones.length === 0) return;
       
-      // 現在選択されているタイムゾーンをハイライト
-      if (timezone === currentTimezone) {
-        option.style.backgroundColor = '#e0e9ff';
-        option.style.fontWeight = 'bold';
-        option.style.position = 'relative';
+      // 地域ヘッダー
+      const regionHeader = document.createElement('div');
+      regionHeader.textContent = regionName;
+      regionHeader.style.padding = '6px 10px';
+      regionHeader.style.backgroundColor = '#f5f5f5';
+      regionHeader.style.fontWeight = 'bold';
+      regionHeader.style.fontSize = '0.9em';
+      regionHeader.style.color = '#555';
+      optionsContainer.appendChild(regionHeader);
+      
+      // この地域のタイムゾーンオプション
+      timezones.forEach(([timezone, label]) => {
+        const option = document.createElement('div');
+        option.textContent = label;
+        option.dataset.timezone = timezone; // データ属性としてタイムゾーン識別子を保持
+        option.style.padding = '8px 15px 8px 20px'; // 左パディングを増やして階層を表現
+        option.style.cursor = 'pointer';
         
-        // チェックマーク
-        const checkmark = document.createElement('span');
-        checkmark.textContent = '✓';
-        checkmark.style.position = 'absolute';
-        checkmark.style.right = '10px';
-        option.appendChild(checkmark);
-      }
-      
-      option.onmouseover = function() {
-        if (timezone !== currentTimezone) {
-          this.style.backgroundColor = '#f5f5f5';
+        // 現在選択されているタイムゾーンをハイライト
+        if (timezone === currentTimezone) {
+          option.style.backgroundColor = '#e0e9ff';
+          option.style.fontWeight = 'bold';
+          option.style.position = 'relative';
+          
+          // チェックマーク
+          const checkmark = document.createElement('span');
+          checkmark.textContent = '✓';
+          checkmark.style.position = 'absolute';
+          checkmark.style.right = '10px';
+          option.appendChild(checkmark);
         }
-      };
+        
+        option.onmouseover = function() {
+          if (timezone !== currentTimezone) {
+            this.style.backgroundColor = '#f5f5f5';
+          }
+        };
+        
+        option.onmouseout = function() {
+          if (timezone !== currentTimezone) {
+            this.style.backgroundColor = '';
+          }
+        };
+        
+        option.onclick = function() {
+          // タイムゾーンの変更を処理
+          changeTimezone(rowId, timezone);
+          menuContainer.remove();
+        };
+        
+        optionsContainer.appendChild(option);
+      });
+    });
+    
+    // 検索機能
+    searchInput.addEventListener('input', function() {
+      const searchText = this.value.toLowerCase();
+      const options = optionsContainer.querySelectorAll('div[data-timezone]');
+      const regionHeaders = optionsContainer.querySelectorAll('div:not([data-timezone])');
       
-      option.onmouseout = function() {
-        if (timezone !== currentTimezone) {
-          this.style.backgroundColor = '';
+      // すべての地域ヘッダーを一旦非表示
+      regionHeaders.forEach(header => {
+        header.style.display = 'none';
+      });
+      
+      let visibleRegions = new Set();
+      
+      // 検索テキストに一致するオプションのみ表示
+      options.forEach(option => {
+        const timezone = option.dataset.timezone;
+        const label = option.textContent.toLowerCase();
+        
+        if (label.includes(searchText) || timezone.toLowerCase().includes(searchText)) {
+          option.style.display = '';
+          
+          // このオプションの地域を特定して表示対象に追加
+          for (const [region, timezones] of Object.entries(regionGroups)) {
+            if (timezones.some(([tz]) => tz === timezone)) {
+              visibleRegions.add(region);
+              break;
+            }
+          }
+        } else {
+          option.style.display = 'none';
         }
-      };
+      });
       
-      option.onclick = function() {
-        // タイムゾーンの変更を処理
-        changeTimezone(rowId, timezone);
-        menuContainer.remove();
-      };
-      
-      optionsContainer.appendChild(option);
+      // 表示対象の地域ヘッダーだけを表示
+      regionHeaders.forEach(header => {
+        if (visibleRegions.has(header.textContent)) {
+          header.style.display = '';
+        }
+      });
     });
     
     // 画面内に収まるように位置を調整
@@ -1232,7 +1383,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 高さを調整してビューポートに収める
         const availableHeight = window.innerHeight - 20; // 上下10pxのマージン
-        menuContainer.style.maxHeight = `${Math.min(300, availableHeight)}px`;
+        menuContainer.style.maxHeight = `${Math.min(400, availableHeight)}px`;
       }
     }
     
@@ -1252,6 +1403,9 @@ document.addEventListener('DOMContentLoaded', function() {
       selectedOption.scrollIntoView({ block: 'center' });
     }
     
+    // 検索ボックスにフォーカス
+    setTimeout(() => searchInput.focus(), 100);
+    
     // document全体のクリックでメニューを閉じる
     document.addEventListener('click', function closeMenu(e) {
       if (!menuContainer.contains(e.target) && e.target !== iconElement) {
@@ -1268,20 +1422,38 @@ document.addEventListener('DOMContentLoaded', function() {
     const row = document.querySelectorAll('.row')[rowId];
     if (!row) return;
     
+    // イベント呼び出し元の情報を取得
+    const menuElement = document.querySelector('.timezone-selection-menu');
+    if (!menuElement) return;
+    
+    // データ属性からどちらのタイムゾーンが変更されているか取得
+    const isLeftTimezone = menuElement.dataset.isLeftTimezone === 'true';
+    
     // 現在のタイムゾーンと新しいタイムゾーンが同じなら何もしない
-    if (rowData[rowId].left.timezone === newTimezone) return;
+    if (isLeftTimezone && rowData[rowId].left.timezone === newTimezone) return;
+    if (!isLeftTimezone && rowData[rowId].right.timezone === newTimezone) return;
     
     // タイムゾーンの変更を保存
-    rowData[rowId].left.timezone = newTimezone;
+    if (isLeftTimezone) {
+      rowData[rowId].left.timezone = newTimezone;
+    } else {
+      rowData[rowId].right.timezone = newTimezone;
+    }
     
     // 現在のUnixタイムスタンプ（存在する場合）
     const unixTime = rowData[rowId].unixtime;
     
     if (unixTime) {
-      // 新しいタイムゾーンで時間を再計算して表示
-      const canadaInput = row.querySelector('[id^="canada-input"]');
-      if (canadaInput) {
-        canadaInput.value = formatUnixTimeToLocalDateTime(unixTime, newTimezone);
+      // 両方のinputの時間を再計算して表示
+      const leftInput = row.querySelector('[id^="canada-input"]');
+      const rightInput = row.querySelector('[id^="japan-input"]');
+      
+      if (leftInput) {
+        leftInput.value = formatUnixTimeToLocalDateTime(unixTime, rowData[rowId].left.timezone);
+      }
+      
+      if (rightInput) {
+        rightInput.value = formatUnixTimeToLocalDateTime(unixTime, rowData[rowId].right.timezone);
       }
     }
     
