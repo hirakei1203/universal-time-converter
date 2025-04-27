@@ -2,14 +2,16 @@ document.addEventListener('DOMContentLoaded', function() {
   // CSS スタイルを追加
   const style = document.createElement('style');
   style.textContent = `
-    .globe-icon {
+    .timezone-icon {
       display: inline-block;
       width: 16px;
       height: 16px;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%234285F4" d="M256 48C141.13 48 48 141.13 48 256s93.13 208 208 208 208-93.13 208-208S370.87 48 256 48z"/><path fill="%23FFFFFF" d="M256 48c-2.5 0-5 .1-7.5.2 2.5-.1 5-.2 7.5-.2zM256 464c-2.5 0-5-.1-7.5-.2 2.5.1 5 .2 7.5 .2zM193.5 52.9c-1.4.1-2.8.3-4.2.4 1.4-.1 2.8-.3 4.2-.4zM318.5 459.1c1.4-.1 2.8-.3 4.2-.4-1.4.1-2.8.3-4.2.4zM189.3 53.3l-1.8.2 1.8-.2zM322.7 458.7l1.8-.2-1.8.2z"/><path fill="%23FFFFFF" d="M256 79.8c11.2 0 22.1.9 32.7 2.7-11-5.7-29.5-8.9-32.7-9.3-3.1.4-21.7 3.6-32.7 9.3 10.6-1.8 21.5-2.7 32.7-2.7zM256 432.2c-11.2 0-22.1-.9-32.7-2.7 11 5.7 29.5 8.9 32.7 9.3 3.1-.4 21.7-3.6 32.7-9.3-10.6 1.8-21.5 2.7-32.7 2.7z"/><path fill="%23FFFFFF" d="M319.5 91.3c-10.3-5-21.5-8.7-33.2-10.8 5.5 3.5 10.8 7.5 15.7 11.9 6.2-.5 12.1-.8 17.5-.8 0-.1 0-.2 0-.3z"/><path fill="%23FFFFFF" d="M209.8 92.4c4.9-4.4 10.2-8.3 15.7-11.9-11.7 2.1-22.9 5.8-33.2 10.8v.3c5.4 0 11.3.2 17.5.8z"/><path fill="%23FFFFFF" d="M319.5 420.7c-10.3 5-21.5 8.7-33.2 10.8-5.5-3.5-10.8-7.5-15.7-11.9-6.2.5-12.1.8-17.5.8 0 .1 0 .2 0 .3z"/><path fill="%23FFFFFF" d="M209.8 419.6c-4.9 4.4-10.2 8.3-15.7 11.9 11.7-2.1 22.9-5.8 33.2-10.8v-.3c-5.4 0-11.3-.2-17.5-.8z"/><path fill="%23FFFFFF" d="M258.9 91.9l-5.8-.2-5.8.2c-2 1.5-3.8 5.8-5.2 13.3 3.5-.3 7.1-.4 10.8-.4h.3c3.8 0 7.4.1 10.9.4-1.4-7.5-3.2-11.8-5.2-13.3z"/><path fill="%23FFFFFF" d="M258.9 420.1l-5.8.2-5.8-.2c-2-1.5-3.8-5.8-5.2-13.3 3.5.3 7.1.4 10.8.4h.3c3.8 0 7.4-.1 10.9-.4-1.4 7.5-3.2 11.8-5.2 13.3z"/><path fill="%23FFFFFF" d="M398.9 256c0-5.8-.3-11.5-.9-17.1-1.9-1.3-3.8-2.6-6-3.8-2.4 0-4.9.1-7.4.1-4.3 0-8.9-.1-13.6-.3-3 10.2-6.9 20.5-11.5 30.7 4.6 10.2 8.5 20.5 11.5 30.7 4.8-.2 9.3-.3 13.6-.3 2.5 0 5 0 7.4.1 2.1-1.2 4.1-2.5 6-3.8.6-5.7.9-11.4.9-17.2 0-6.4-.3-12.7-1-18.9.7-6.3 1-12.6 1-19.2z"/><path fill="%23FFFFFF" d="M113.1 256c0 5.8.3 11.5.9 17.1 1.9 1.3 3.8 2.6 6 3.8 2.4 0 4.9-.1 7.4-.1 4.3 0 8.9.1 13.6.3 3-10.2 6.9-20.5 11.5-30.7-4.6-10.2-8.5-20.5-11.5-30.7-4.8.2-9.3.3-13.6.3-2.5 0-5 0-7.4-.1-2.1 1.2-4.1 2.5-6 3.8-.6 5.7-.9 11.4-.9 17.2 0 6.4.3 12.7 1 18.9-.7 6.3-1 12.6-1 19.2z"/><path fill="%23FFFFFF" d="M256 152c-30.3 0-62.9 2.8-93 7.7-3.6 11.5-6.6 23.4-8.8 35.8 30.4-5.5 64.7-8.6 101.8-8.6 37.1 0 71.4 3.1 101.8 8.6-2.2-12.4-5.2-24.3-8.8-35.8-30.1-4.9-62.7-7.7-93-7.7z"/><path fill="%23FFFFFF" d="M256 360c30.3 0 62.9-2.8 93-7.7 3.6-11.5 6.6-23.4 8.8-35.8-30.4 5.5-64.7 8.6-101.8 8.6-37.1 0-71.4-3.1-101.8-8.6 2.2 12.4 5.2 24.3 8.8 35.8 30.1 4.9 62.7 7.7 93 7.7z"/><path fill="%23FFFFFF" d="M352.5 256c0-35.4-3.2-67.8-8.5-95.7-10.3-1.4-21-2.3-32-2.3-19.4 0-36.3 1.8-49.9 5.2-6.4 28.4-10 61.6-10 92.9 0 31.2 3.7 64.5 10 92.9 13.6 3.3 30.5 5.2 49.9 5.2 11 0 21.7-.9 32-2.3 5.3-28 8.5-60.4 8.5-95.9z"/><path fill="%23FFFFFF" d="M159.5 256c0 35.4 3.2 67.8 8.5 95.7 10.3 1.4 21 2.3 32 2.3 19.4 0 36.3-1.8 49.9-5.2 6.4-28.4 10-61.6 10-92.9 0-31.2-3.7-64.5-10-92.9-13.6-3.3-30.5-5.2-49.9-5.2-11 0-21.7.9-32 2.3-5.3 28-8.5 60.4-8.5 95.9z"/></svg>');
       background-size: cover;
       vertical-align: middle;
       margin-right: 5px;
+    }
+    .globe-icon {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%234285F4" d="M256 48C141.13 48 48 141.13 48 256s93.13 208 208 208 208-93.13 208-208S370.87 48 256 48z"/><path fill="%23FFFFFF" d="M256 48c-2.5 0-5 .1-7.5.2 2.5-.1 5-.2 7.5-.2zM256 464c-2.5 0-5-.1-7.5-.2 2.5.1 5 .2 7.5 .2zM193.5 52.9c-1.4.1-2.8.3-4.2.4 1.4-.1 2.8-.3 4.2-.4zM318.5 459.1c1.4-.1 2.8-.3 4.2-.4-1.4.1-2.8.3-4.2.4zM189.3 53.3l-1.8.2 1.8-.2zM322.7 458.7l1.8-.2-1.8.2z"/><path fill="%23FFFFFF" d="M256 79.8c11.2 0 22.1.9 32.7 2.7-11-5.7-29.5-8.9-32.7-9.3-3.1.4-21.7 3.6-32.7 9.3 10.6-1.8 21.5-2.7 32.7-2.7zM256 432.2c-11.2 0-22.1-.9-32.7-2.7 11 5.7 29.5 8.9 32.7 9.3 3.1-.4 21.7-3.6 32.7-9.3-10.6 1.8-21.5 2.7-32.7 2.7z"/><path fill="%23FFFFFF" d="M319.5 91.3c-10.3-5-21.5-8.7-33.2-10.8 5.5 3.5 10.8 7.5 15.7 11.9 6.2-.5 12.1-.8 17.5-.8 0-.1 0-.2 0-.3z"/><path fill="%23FFFFFF" d="M209.8 92.4c4.9-4.4 10.2-8.3 15.7-11.9-11.7 2.1-22.9 5.8-33.2 10.8v.3c5.4 0 11.3.2 17.5.8z"/><path fill="%23FFFFFF" d="M319.5 420.7c-10.3 5-21.5 8.7-33.2 10.8-5.5-3.5-10.8-7.5-15.7-11.9-6.2.5-12.1.8-17.5.8 0 .1 0 .2 0 .3z"/><path fill="%23FFFFFF" d="M209.8 419.6c-4.9 4.4-10.2 8.3-15.7 11.9 11.7-2.1 22.9-5.8 33.2-10.8v-.3c-5.4 0-11.3-.2-17.5-.8z"/><path fill="%23FFFFFF" d="M258.9 91.9l-5.8-.2-5.8.2c-2 1.5-3.8 5.8-5.2 13.3 3.5-.3 7.1-.4 10.8-.4h.3c3.8 0 7.4.1 10.9.4-1.4-7.5-3.2-11.8-5.2-13.3z"/><path fill="%23FFFFFF" d="M258.9 420.1l-5.8.2-5.8-.2c-2-1.5-3.8-5.8-5.2-13.3 3.5.3 7.1.4 10.8.4h.3c3.8 0 7.4-.1 10.9-.4-1.4 7.5-3.2 11.8-5.2 13.3z"/><path fill="%23FFFFFF" d="M398.9 256c0-5.8-.3-11.5-.9-17.1-1.9-1.3-3.8-2.6-6-3.8-2.4 0-4.9.1-7.4.1-4.3 0-8.9-.1-13.6-.3-3 10.2-6.9 20.5-11.5 30.7 4.6 10.2 8.5 20.5 11.5 30.7 4.8-.2 9.3-.3 13.6-.3 2.5 0 5 0 7.4.1 2.1-1.2 4.1-2.5 6-3.8.6-5.7.9-11.4.9-17.2 0-6.4-.3-12.7-1-18.9.7-6.3 1-12.6 1-19.2z"/><path fill="%23FFFFFF" d="M113.1 256c0 5.8.3 11.5.9 17.1 1.9 1.3 3.8 2.6 6 3.8 2.4 0 4.9-.1 7.4-.1 4.3 0 8.9.1 13.6.3 3-10.2 6.9-20.5 11.5-30.7-4.6-10.2-8.5-20.5-11.5-30.7-4.8.2-9.3.3-13.6.3-2.5 0-5 0-7.4-.1-2.1 1.2-4.1 2.5-6 3.8-.6 5.7-.9 11.4-.9 17.2 0 6.4.3 12.7 1 18.9-.7 6.3-1 12.6-1 19.2z"/><path fill="%23FFFFFF" d="M256 152c-30.3 0-62.9 2.8-93 7.7-3.6 11.5-6.6 23.4-8.8 35.8 30.4-5.5 64.7-8.6 101.8-8.6 37.1 0 71.4 3.1 101.8 8.6-2.2-12.4-5.2-24.3-8.8-35.8-30.1-4.9-62.7-7.7-93-7.7z"/><path fill="%23FFFFFF" d="M256 360c30.3 0 62.9-2.8 93-7.7 3.6-11.5 6.6-23.4 8.8-35.8-30.4 5.5-64.7 8.6-101.8 8.6-37.1 0-71.4-3.1-101.8-8.6 2.2 12.4 5.2 24.3 8.8 35.8 30.1 4.9 62.7 7.7 93 7.7z"/><path fill="%23FFFFFF" d="M352.5 256c0-35.4-3.2-67.8-8.5-95.7-10.3-1.4-21-2.3-32-2.3-19.4 0-36.3 1.8-49.9 5.2-6.4 28.4-10 61.6-10 92.9 0 31.2 3.7 64.5 10 92.9 13.6 3.3 30.5 5.2 49.9 5.2 11 0 21.7-.9 32-2.3 5.3-28 8.5-60.4 8.5-95.9z"/><path fill="%23FFFFFF" d="M159.5 256c0 35.4 3.2 67.8 8.5 95.7 10.3 1.4 21 2.3 32 2.3 19.4 0 36.3-1.8 49.9-5.2 6.4-28.4 10-61.6 10-92.9 0-31.2-3.7-64.5-10-92.9-13.6-3.3-30.5-5.2-49.9-5.2-11 0-21.7.9-32 2.3-5.3 28-8.5 60.4-8.5 95.9z"/></svg>');
     }
   `;
   document.head.appendChild(style);
@@ -24,6 +26,51 @@ document.addEventListener('DOMContentLoaded', function() {
   // デフォルトのタイムゾーン設定
   const DEFAULT_LEFT_TIMEZONE = 'America/Vancouver';
   const DEFAULT_RIGHT_TIMEZONE = 'Asia/Tokyo';
+  
+  // タイムゾーンごとのアイコン情報
+  const TIMEZONE_ICONS = {
+    // 北米
+    'America/Vancouver': 'canada.png',
+    'America/Edmonton': 'canada.png',
+    'America/Toronto': 'canada.png',
+    'America/Halifax': 'canada.png',
+    'America/Los_Angeles': 'usa.png',
+    'America/Denver': 'usa.png',
+    'America/Chicago': 'usa.png',
+    'America/New_York': 'usa.png',
+    // 南米
+    'America/Sao_Paulo': 'brazil.png',
+    'America/Buenos_Aires': 'argentina.png',
+    // ヨーロッパ
+    'Europe/London': 'uk.png',
+    'Europe/Paris': 'france.png',
+    'Europe/Berlin': 'germany.png',
+    'Europe/Madrid': 'spain.png',
+    'Europe/Rome': 'italy.png',
+    'Europe/Amsterdam': 'netherlands.png',
+    'Europe/Zurich': 'switzerland.png',
+    'Europe/Athens': 'greece.png',
+    'Europe/Helsinki': 'finland.png',
+    'Europe/Moscow': 'russia.png',
+    // アフリカ
+    'Africa/Cairo': 'egypt.png',
+    'Africa/Johannesburg': 'southafrica.png',
+    // アジア
+    'Asia/Dubai': 'uae.png',
+    'Asia/Mumbai': 'india.png',
+    'Asia/Kolkata': 'india.png',
+    'Asia/Dhaka': 'bangladesh.png',
+    'Asia/Bangkok': 'thailand.png',
+    'Asia/Singapore': 'singapore.png',
+    'Asia/Shanghai': 'china.png',
+    'Asia/Hong_Kong': 'hongkong.png',
+    'Asia/Seoul': 'korea.png',
+    'Asia/Tokyo': 'japan.png',
+    // オセアニア
+    'Australia/Perth': 'australia.png',
+    'Australia/Sydney': 'australia.png',
+    'Pacific/Auckland': 'newzealand.png'
+  };
   
   // カナダのタイムゾーンリスト
   const CANADA_TIMEZONES = {
@@ -106,6 +153,78 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // カレンダーと時間選択のイベントを設定
   setupDateTimeSelectors();
+
+  // タイムゾーンアイコンを更新
+  updateTimezoneIcons();
+  
+  // タイムゾーンアイコンのイベントを設定
+  setupTimezoneIcons();
+  
+  /**
+   * 特定のタイムゾーンに対応するアイコン要素を取得する
+   * @param {string} timezone - タイムゾーン識別子
+   * @return {string} - HTMLクラス名
+   */
+  function getTimezoneIconClass(timezone) {
+    const iconFilename = TIMEZONE_ICONS[timezone] || 'globe.png';
+    
+    // アイコンファイルが存在するか確認
+    // 存在する場合はそのファイルを使用、存在しない場合はデフォルトのグローブアイコンを使用
+    return iconFilename === 'globe.png' ? 'globe-icon' : `timezone-icon-${timezone.replace(/\//g, '-')}`;
+  }
+
+  /**
+   * すべてのタイムゾーンアイコンを更新する
+   */
+  function updateTimezoneIcons() {
+    // すべての行を処理
+    const rows = document.querySelectorAll('.row');
+    
+    rows.forEach((row, rowIndex) => {
+      // この行のデータが存在しない場合はスキップ
+      if (!rowData[rowIndex]) return;
+      
+      // 左側のアイコン
+      const leftIconElement = row.querySelector('.timezone-box:first-child .timezone-icon');
+      if (leftIconElement) {
+        // 現在のすべてのクラスをクリア (timezone-iconは残す)
+        leftIconElement.className = 'timezone-icon';
+        
+        // 新しいクラスを追加
+        const leftTimezone = rowData[rowIndex].left.timezone;
+        const leftIconClass = getTimezoneIconClass(leftTimezone);
+        leftIconElement.classList.add(leftIconClass);
+        
+        // カスタムアイコンの場合はスタイルを設定
+        if (leftIconClass !== 'globe-icon') {
+          const iconFilename = TIMEZONE_ICONS[leftTimezone];
+          if (iconFilename) {
+            leftIconElement.style.backgroundImage = `url('icons/${iconFilename}')`;
+          }
+        }
+      }
+      
+      // 右側のアイコン
+      const rightIconElement = row.querySelector('.timezone-box:nth-child(2) .timezone-icon');
+      if (rightIconElement) {
+        // 現在のすべてのクラスをクリア (timezone-iconは残す)
+        rightIconElement.className = 'timezone-icon';
+        
+        // 新しいクラスを追加
+        const rightTimezone = rowData[rowIndex].right.timezone;
+        const rightIconClass = getTimezoneIconClass(rightTimezone);
+        rightIconElement.classList.add(rightIconClass);
+        
+        // カスタムアイコンの場合はスタイルを設定
+        if (rightIconClass !== 'globe-icon') {
+          const iconFilename = TIMEZONE_ICONS[rightTimezone];
+          if (iconFilename) {
+            rightIconElement.style.backgroundImage = `url('icons/${iconFilename}')`;
+          }
+        }
+      }
+    });
+  }
   
   /**
    * 新しい行を追加する関数
@@ -116,6 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 行番号を取得（既存の行数+1）
     const rowCount = document.querySelectorAll('.row').length + 1;
+    const rowIndex = rowCount - 1; // 0ベースのインデックス
     
     // 新しい行を作成
     const newRow = document.createElement('div');
@@ -140,6 +260,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // 行を挿入
     container.insertBefore(newRow, addRowDiv);
     
+    // 行のIDを取得して初期選択を明示的に削除
+    const rowId = Array.from(document.querySelectorAll('.row')).indexOf(newRow);
+    if (rowId !== -1) {
+      // この行の選択データをクリア
+      if (rowSelectedDates[rowId]) delete rowSelectedDates[rowId];
+      if (rowSelectedTimes[rowId]) delete rowSelectedTimes[rowId];
+      
+      // 新しい行のデータを初期化
+      rowData[rowId] = {
+        unixtime: null,
+        left: { timezone: DEFAULT_LEFT_TIMEZONE },
+        right: { timezone: DEFAULT_RIGHT_TIMEZONE }
+      };
+    }
+    
     // 新しい行の削除ボタンと時間入力にイベントを設定
     setupDeleteButtons();
     setupTimeInputs();
@@ -147,13 +282,8 @@ document.addEventListener('DOMContentLoaded', function() {
     setupDateTimeSelectors(); // 新しい行にもカレンダー機能を設定
     setupTimezoneIcons(); // タイムゾーンアイコンのイベント設定
     
-    // 行のIDを取得して初期選択を明示的に削除
-    const rowId = Array.from(document.querySelectorAll('.row')).indexOf(newRow);
-    if (rowId !== -1) {
-      // この行の選択データをクリア
-      if (rowSelectedDates[rowId]) delete rowSelectedDates[rowId];
-      if (rowSelectedTimes[rowId]) delete rowSelectedTimes[rowId];
-    }
+    // タイムゾーンアイコンを更新
+    updateTimezoneIcons();
     
     // データを保存
     saveData();
@@ -226,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // データを保存
     saveData();
   }
-
+  
   /**
    * 日付文字列をパースして日付オブジェクトを返す
    */
@@ -704,6 +834,9 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         }
       }
+      
+      // タイムゾーンアイコンを更新（保存データの読み込み後）
+      updateTimezoneIcons();
     });
   }
   
@@ -741,13 +874,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // 行を挿入
     container.insertBefore(newRow, addRowDiv);
     
-    // 新しい行の削除ボタンと時間入力にイベントを設定
-    setupDeleteButtons();
-    setupTimeInputs();
-    setupNoteInputs();
-    setupDateTimeSelectors(); // 新しい行にもカレンダー機能を設定
-    setupTimezoneIcons(); // タイムゾーンアイコンのイベント設定
-    
     // 行のIDを取得して初期選択を明示的に削除（rowDataに値がない場合）
     if (!savedData.canadaTime && !savedData.japanTime) {
       if (rowSelectedDates[rowIndex]) delete rowSelectedDates[rowIndex];
@@ -764,6 +890,16 @@ document.addEventListener('DOMContentLoaded', function() {
         right: { timezone: DEFAULT_RIGHT_TIMEZONE }
       };
     }
+    
+    // 新しい行の削除ボタンと時間入力にイベントを設定
+    setupDeleteButtons();
+    setupTimeInputs();
+    setupNoteInputs();
+    setupDateTimeSelectors(); // 新しい行にもカレンダー機能を設定
+    setupTimezoneIcons(); // タイムゾーンアイコンのイベント設定
+    
+    // タイムゾーンアイコンを更新
+    updateTimezoneIcons();
   }
 
   /**
@@ -1282,10 +1418,33 @@ document.addEventListener('DOMContentLoaded', function() {
       // この地域のタイムゾーンオプション
       timezones.forEach(([timezone, label]) => {
         const option = document.createElement('div');
-        option.textContent = label;
         option.dataset.timezone = timezone; // データ属性としてタイムゾーン識別子を保持
         option.style.padding = '8px 15px 8px 20px'; // 左パディングを増やして階層を表現
         option.style.cursor = 'pointer';
+        option.style.display = 'flex';
+        option.style.alignItems = 'center';
+
+        // タイムゾーンアイコンを追加
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'timezone-icon';
+        const iconClass = getTimezoneIconClass(timezone);
+        iconSpan.classList.add(iconClass);
+        
+        // カスタムアイコンの場合はスタイルを設定
+        if (iconClass !== 'globe-icon') {
+          const iconFilename = TIMEZONE_ICONS[timezone];
+          if (iconFilename) {
+            iconSpan.style.backgroundImage = `url('icons/${iconFilename}')`;
+          }
+        }
+        
+        // ラベル部分
+        const labelSpan = document.createElement('span');
+        labelSpan.textContent = label;
+        labelSpan.style.marginLeft = '5px';
+        
+        option.appendChild(iconSpan);
+        option.appendChild(labelSpan);
         
         // 現在選択されているタイムゾーンをハイライト
         if (timezone === currentTimezone) {
@@ -1342,7 +1501,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const label = option.textContent.toLowerCase();
         
         if (label.includes(searchText) || timezone.toLowerCase().includes(searchText)) {
-          option.style.display = '';
+          option.style.display = 'flex';
           
           // このオプションの地域を特定して表示対象に追加
           for (const [region, timezones] of Object.entries(regionGroups)) {
@@ -1456,6 +1615,9 @@ document.addEventListener('DOMContentLoaded', function() {
         rightInput.value = formatUnixTimeToLocalDateTime(unixTime, rowData[rowId].right.timezone);
       }
     }
+    
+    // タイムゾーンアイコンを更新
+    updateTimezoneIcons();
     
     // データを保存
     saveData();
