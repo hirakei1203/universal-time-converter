@@ -49,6 +49,18 @@ body {
   background-position: center;
 }
 
+.timezone-icon-in-select-box {
+  /* position: absolute; */
+  left: 8px;
+  top: 50%;
+  /* transform: translateY(-50%); */
+  width: 16px;
+  height: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 /* メープルリーフアイコン */
 .maple-leaf-icon {
   background-image: url('maple_leaf.png');

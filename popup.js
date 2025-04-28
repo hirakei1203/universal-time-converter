@@ -1419,14 +1419,14 @@ document.addEventListener('DOMContentLoaded', function() {
       timezones.forEach(([timezone, label]) => {
         const option = document.createElement('div');
         option.dataset.timezone = timezone; // データ属性としてタイムゾーン識別子を保持
-        option.style.padding = '8px 15px 8px 20px'; // 左パディングを増やして階層を表現
+        option.style.padding = '8px 15px 8px 12px'; // 左パディングを増やして階層を表現
         option.style.cursor = 'pointer';
         option.style.display = 'flex';
         option.style.alignItems = 'center';
 
         // タイムゾーンアイコンを追加
         const iconSpan = document.createElement('span');
-        iconSpan.className = 'timezone-icon';
+        iconSpan.className = 'timezone-icon-in-select-box';
         const iconClass = getTimezoneIconClass(timezone);
         iconSpan.classList.add(iconClass);
         
