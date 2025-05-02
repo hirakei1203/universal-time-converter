@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
   style.textContent = `
     .timezone-icon {
       display: inline-block;
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
       background-size: cover;
       vertical-align: middle;
       margin-right: 5px;
@@ -1076,11 +1076,45 @@ document.addEventListener('DOMContentLoaded', function() {
     
     timeOptions.forEach(time => {
       const timeOption = document.createElement('div');
-      timeOption.textContent = time;
       timeOption.style.padding = '10px 15px';
       timeOption.style.textAlign = 'center';
       timeOption.style.cursor = 'pointer';
       timeOption.style.borderBottom = '1px solid #eee';
+      timeOption.style.display = 'flex';
+      timeOption.style.justifyContent = 'center';
+      timeOption.style.alignItems = 'center';
+      
+      // テキスト部分
+      const timeText = document.createElement('span');
+      timeText.textContent = time;
+      timeOption.appendChild(timeText);
+      
+      // 太陽または月のアイコンを追加
+      const iconSpan = document.createElement('span');
+      iconSpan.style.marginLeft = '8px';
+      iconSpan.style.fontSize = '14px';
+      
+      // 時間の部分だけを抽出してパース
+      const timeParts = time.split(' ');
+      const hourMin = timeParts[0].split(':');
+      const hour = parseInt(hourMin[0], 10);
+      const ampm = timeParts[1];
+      
+      // AM 7:00〜PM 7:00は太陽、それ以外は月
+      const isDaytime = 
+        (ampm === 'AM' && hour >= 7 && hour !== 12) || // AM 7:00以降（12:00 AM除く）
+        (ampm === 'PM' && hour < 7) ||  // PM 7:00未満
+        (ampm === 'PM' && hour === 12); // 正午（PM 12:00）
+      
+      if (isDaytime) {
+        iconSpan.textContent = '☀️'; // 太陽
+        iconSpan.title = '昼間の時間帯';
+      } else {
+        iconSpan.textContent = '🌙'; // 月
+        iconSpan.title = '夜間の時間帯';
+      }
+      
+      timeOption.appendChild(iconSpan);
       
       // 選択済みの時間をハイライト表示
       if (selectedTime === time) {
