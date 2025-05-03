@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // カナダのタイムゾーンリスト
   const CANADA_TIMEZONES = {
-    'America/Vancouver': 'バンクーバー (PST/PDT)',
+    'America/Vancouver': 'Vancouver (PST/PDT)',
     'America/Edmonton': 'エドモントン (MST/MDT)',
     'America/Toronto': 'トロント (EST/EDT)',
     'America/Halifax': 'ハリファックス (AST/ADT)'
