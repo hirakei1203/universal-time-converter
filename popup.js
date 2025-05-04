@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const CANADA_TIMEZONES = {
     'America/Vancouver': 'Vancouver (PST/PDT)',
     'America/Edmonton': 'エドモントン (MST/MDT)',
-    'America/Toronto': 'トロント (EST/EDT)',
+    'America/Toronto': 'Toronto (EST/EDT)',
     'America/Halifax': 'ハリファックス (AST/ADT)'
   };
   
