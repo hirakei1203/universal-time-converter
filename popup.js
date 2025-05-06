@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // 世界のタイムゾーンリスト
   const WORLD_TIMEZONES = {
     // 北米
-    'America/Los_Angeles': 'ロサンゼルス (UTC-8/7)',
+    'America/Los_Angeles': 'Los Angeles (UTC-8/7)',
     'America/Denver': 'デンバー (UTC-7/6)',
     'America/Chicago': 'シカゴ (UTC-6/5)',
     'America/New_York': 'ニューヨーク (UTC-5/4)',
