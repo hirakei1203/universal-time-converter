@@ -242,15 +242,15 @@ document.addEventListener('DOMContentLoaded', function() {
     newRow.className = 'row';
     newRow.innerHTML = `
       <div class="timezone-box">
-        <span class="timezone-icon globe-icon" title="タイムゾーンを変更"></span>
-        <input type="text" class="timezone-input" id="canada-input${rowCount}" placeholder="左側の時間">
+        <span class="timezone-icon globe-icon" title="Convert Timezone"></span>
+        <input type="text" class="timezone-input" id="canada-input${rowCount}" placeholder="Time A">
       </div>
       <div class="timezone-box">
-        <span class="timezone-icon globe-icon" title="タイムゾーンを変更"></span>
-        <input type="text" class="timezone-input" id="japan-input${rowCount}" placeholder="右側の時間">
+        <span class="timezone-icon globe-icon" title="Convert Timezone"></span>
+        <input type="text" class="timezone-input" id="japan-input${rowCount}" placeholder="Time B">
       </div>
       <div class="note-box">
-        <input type="text" class="note-input" placeholder="メモ">
+        <input type="text" class="note-input" placeholder="Memo">
       </div>
       <div class="remove-box">
         <button class="delete-btn">×</button>
@@ -735,7 +735,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function getDayOfWeek(year, month, day) {
     const date = new Date(year, month, day);
     const dayOfWeek = date.getDay();
-    const days = ['日', '月', '火', '水', '木', '金', '土'];
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     return days[dayOfWeek];
   }
   
@@ -856,15 +856,15 @@ document.addEventListener('DOMContentLoaded', function() {
     newRow.className = 'row';
     newRow.innerHTML = `
       <div class="timezone-box">
-        <span class="timezone-icon globe-icon" title="タイムゾーンを変更"></span>
-        <input type="text" class="timezone-input" id="canada-input${rowCount}" placeholder="左側の時間" value="${savedData.canadaTime || ''}">
+        <span class="timezone-icon globe-icon" title="Convert Timezone"></span>
+        <input type="text" class="timezone-input" id="canada-input${rowCount}" placeholder="Time A" value="${savedData.canadaTime || ''}">
       </div>
       <div class="timezone-box">
-        <span class="timezone-icon globe-icon" title="タイムゾーンを変更"></span>
-        <input type="text" class="timezone-input" id="japan-input${rowCount}" placeholder="右側の時間" value="${savedData.japanTime || ''}">
+        <span class="timezone-icon globe-icon" title="Convert Timezone"></span>
+        <input type="text" class="timezone-input" id="japan-input${rowCount}" placeholder="Time B" value="${savedData.japanTime || ''}">
       </div>
       <div class="note-box">
-        <input type="text" class="note-input" placeholder="メモ" value="${savedData.note || ''}">
+        <input type="text" class="note-input" placeholder="Memo" value="${savedData.note || ''}">
       </div>
       <div class="remove-box">
         <button class="delete-btn">×</button>
@@ -979,7 +979,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // カレンダーを閉じるボタン
     const closeBtn = document.createElement('div');
-    closeBtn.textContent = 'カレンダーを閉じる';
+    closeBtn.textContent = 'Close Calendar';
     closeBtn.style.textAlign = 'center';
     closeBtn.style.padding = '10px';
     closeBtn.style.marginBottom = '10px';
@@ -1151,13 +1151,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // カレンダーを更新する関数
     function updateCalendar() {
       // 月表示を更新
-      monthDisplay.textContent = `${currentYear}年 ${currentMonth + 1}月`;
+      monthDisplay.textContent = `${currentYear}/ ${currentMonth + 1}`;
       
       // カレンダーをクリア
       calendar.innerHTML = '';
       
       // 曜日ヘッダー
-      const daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
+      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
       const headerRow = document.createElement('div');
       headerRow.style.display = 'grid';
       headerRow.style.gridTemplateColumns = 'repeat(7, 1fr)';
@@ -1386,7 +1386,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // メニュータイトル
     const menuTitle = document.createElement('div');
-    menuTitle.textContent = 'タイムゾーン選択';
+    menuTitle.textContent = 'Select Timezone';
     menuTitle.style.fontWeight = 'bold';
     menuTitle.style.padding = '8px 10px';
     menuTitle.style.borderBottom = '1px solid #eee';
@@ -1402,7 +1402,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const searchInput = document.createElement('input');
     searchInput.type = 'text';
-    searchInput.placeholder = 'タイムゾーンを検索...';
+    searchInput.placeholder = 'Search Timezone...';
     searchInput.style.width = '100%';
     searchInput.style.padding = '5px';
     searchInput.style.border = '1px solid #ccc';
@@ -1423,16 +1423,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // タイムゾーンを地域ごとにグループ化して表示
     const regionGroups = {
-      '北米': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('America/') && 
+      'North America': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('America/') && 
              (tz.includes('Vancouver') || tz.includes('Edmonton') || tz.includes('Toronto') || 
               tz.includes('Halifax') || tz.includes('Los_Angeles') || tz.includes('Denver') || 
               tz.includes('Chicago') || tz.includes('New_York'))),
-      '南米': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('America/') && 
+      'South America': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('America/') && 
              (tz.includes('Sao_Paulo') || tz.includes('Buenos_Aires'))),
-      'ヨーロッパ': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('Europe/')),
-      'アフリカ': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('Africa/')),
-      'アジア': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('Asia/')),
-      'オセアニア': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('Australia/') || tz.startsWith('Pacific/'))
+      'Europe': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('Europe/')),
+      'Africa': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('Africa/')),
+      'Asia': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('Asia/')),
+      'Oceania': Object.entries(allTimezones).filter(([tz]) => tz.startsWith('Australia/') || tz.startsWith('Pacific/'))
     };
     
     // 地域ごとにオプションを追加
