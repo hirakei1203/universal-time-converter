@@ -75,50 +75,50 @@ document.addEventListener('DOMContentLoaded', function() {
   // カナダのタイムゾーンリスト
   const CANADA_TIMEZONES = {
     'America/Vancouver': 'Vancouver (PST/PDT)',
-    'America/Edmonton': 'エドモントン (MST/MDT)',
+    'America/Edmonton': 'Edmonton (MST/MDT)',
     'America/Toronto': 'Toronto (EST/EDT)',
-    'America/Halifax': 'ハリファックス (AST/ADT)'
+    'America/Halifax': 'Halifax (AST/ADT)'
   };
   
   // 世界のタイムゾーンリスト
   const WORLD_TIMEZONES = {
-    // 北米
+    // North America
     'America/Los_Angeles': 'Los Angeles (UTC-8/7)',
-    'America/Denver': 'デンバー (UTC-7/6)',
-    'America/Chicago': 'シカゴ (UTC-6/5)',
-    'America/New_York': 'ニューヨーク (UTC-5/4)',
-    // 南米
-    'America/Sao_Paulo': 'サンパウロ (UTC-3)',
-    'America/Buenos_Aires': 'ブエノスアイレス (UTC-3)',
-    // ヨーロッパ
-    'Europe/London': 'ロンドン (UTC+0/1)',
-    'Europe/Paris': 'パリ (UTC+1/2)',
-    'Europe/Berlin': 'ベルリン (UTC+1/2)',
-    'Europe/Madrid': 'マドリード (UTC+1/2)',
-    'Europe/Rome': 'ローマ (UTC+1/2)',
-    'Europe/Amsterdam': 'アムステルダム (UTC+1/2)',
-    'Europe/Zurich': 'チューリッヒ (UTC+1/2)',
-    'Europe/Athens': 'アテネ (UTC+2/3)',
-    'Europe/Helsinki': 'ヘルシンキ (UTC+2/3)',
-    'Europe/Moscow': 'モスクワ (UTC+3)',
-    // アフリカ
-    'Africa/Cairo': 'カイロ (UTC+2)',
-    'Africa/Johannesburg': 'ヨハネスブルグ (UTC+2)',
-    // アジア
-    'Asia/Dubai': 'ドバイ (UTC+4)',
-    'Asia/Mumbai': 'ムンバイ (UTC+5:30)',
-    'Asia/Kolkata': 'コルカタ (UTC+5:30)',
-    'Asia/Dhaka': 'ダッカ (UTC+6)',
-    'Asia/Bangkok': 'バンコク (UTC+7)',
-    'Asia/Singapore': 'シンガポール (UTC+8)',
-    'Asia/Shanghai': '上海 (UTC+8)',
-    'Asia/Hong_Kong': '香港 (UTC+8)',
-    'Asia/Seoul': 'ソウル (UTC+9)',
-    'Asia/Tokyo': '東京 (UTC+9)',
-    // オセアニア
-    'Australia/Perth': 'パース (UTC+8)',
-    'Australia/Sydney': 'シドニー (UTC+10/11)',
-    'Pacific/Auckland': 'オークランド (UTC+12/13)'
+    'America/Denver': 'Denver (UTC-7/6)',
+    'America/Chicago': 'Chicago (UTC-6/5)',
+    'America/New_York': 'New York (UTC-5/4)',
+    // South America
+    'America/Sao_Paulo': 'Sao Paulo (UTC-3)',
+    'America/Buenos_Aires': 'Buenos Aires (UTC-3)',
+    // Europe
+    'Europe/London': 'London (UTC+0/1)',
+    'Europe/Paris': 'Paris (UTC+1/2)',
+    'Europe/Berlin': 'Berlin (UTC+1/2)',
+    'Europe/Madrid': 'Madrid (UTC+1/2)',
+    'Europe/Rome': 'Rome (UTC+1/2)',
+    'Europe/Amsterdam': 'Amsterdam (UTC+1/2)',
+    'Europe/Zurich': 'Zurich (UTC+1/2)',
+    'Europe/Athens': 'Athens (UTC+2/3)',
+    'Europe/Helsinki': 'Helsinki (UTC+2/3)',
+    'Europe/Moscow': 'Moscow (UTC+3)',
+    // Africa
+    'Africa/Cairo': 'Cairo (UTC+2)',
+    'Africa/Johannesburg': 'Johannesburg (UTC+2)',
+    // Asia
+    'Asia/Dubai': 'Dubai (UTC+4)',
+    'Asia/Mumbai': 'Mumbai (UTC+5:30)',
+    'Asia/Kolkata': 'Kolkata (UTC+5:30)',
+    'Asia/Dhaka': 'Dhaka (UTC+6)',
+    'Asia/Bangkok': 'Bangkok (UTC+7)',
+    'Asia/Singapore': 'Singapore (UTC+8)',
+    'Asia/Shanghai': 'Shanghai (UTC+8)',
+    'Asia/Hong_Kong': 'Hong Kong (UTC+8)',
+    'Asia/Seoul': 'Seoul (UTC+9)',
+    'Asia/Tokyo': 'Tokyo (UTC+9)',
+    // Oceania
+    'Australia/Perth': 'Perth (UTC+8)',
+    'Australia/Sydney': 'Sydney (UTC+10/11)',
+    'Pacific/Auckland': 'Auckland (UTC+12/13)'
   };
   
   // 各行の選択された日付を保存するオブジェクト
