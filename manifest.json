@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "UniClock 時差変換アプリ",
+    "name": "UniClock Global Time Converter",
     "version": "1.0.0",
-    "description": "世界中のタイムゾーン同士の時間を変換できます。調べた時間やメモを保存することが毎回調べる手間を省くことができます。",
+    "description": "Convert time between different timezones with friendly interface.",
     "action": {
       "default_popup": "popup.html",
       "default_icon": {
